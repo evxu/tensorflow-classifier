@@ -85,7 +85,7 @@ def do_eval(sess, top_k_op, images, labels, images_placeholder, labels_placehold
     """
     compute the average accuracy on num_examples examples with current defualt graph and its variables
     this can be used for validaton, and can also be used to go through training data.
-    depending on what images and labels queue are passed
+    by passing corresponding images and label tensors.
     """
     # Compute number of steps in an epoch
     num_iter = int(math.ceil(num_examples / FLAGS.batch_size))
@@ -138,7 +138,6 @@ def run_training(start_time):
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=FLAGS.learning_rate)
         # create_train_op that ensures that when we evaluate it to get the loss,
         # the update_ops are done and the gradient updates are computed.
-        # train_op = slim.learning.create_train_op(loss, optimizer)
         train_op = optimizer.minimize(loss)
         tf.summary.scalar('learning_rate', FLAGS.learning_rate)
         tf.summary.scalar('batch_size', FLAGS.batch_size)
@@ -175,7 +174,7 @@ def run_training(start_time):
             # Start input enqueue threads.
             coord = tf.train.Coordinator()
             threads = tf.train.start_queue_runners(coord=coord)
-            # images, labels = inputs(FLAGS.train_data, FLAGS.img_size, FLAGS.batch_size)
+            
             for step in xrange(FLAGS.max_steps+1):
                 # Get value of a batch of training images and labels
                 x, y = sess.run([tr_images, tr_labels])
