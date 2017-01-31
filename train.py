@@ -167,6 +167,6 @@ if __name__ == '__main__':
     parser.add_argument('--num_classes', type=int, default=2, help='Number of classes')
     parser.add_argument('--train_data', type=str, default='train.tfrecords', help='TFRecords filename of training data')
     parser.add_argument('--eval_data', type=str, default='validation.tfrecords', help='TFRecords filename of validation data')
-    parser.add_argument('--log_dir', type=str, default='./temp_log', help='Directory to put the log data')
+    parser.add_argument('--log_dir', type=str, default='./log/test', help='Directory to put the log data')
     FLAGS, unparsed = parser.parse_known_args()
     tf.app.run()

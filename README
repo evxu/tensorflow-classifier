@@ -1,0 +1,19 @@
+gpu-b01:/u02/wang/tf-dhl2
+1. create_TFRecords.sh 
+creates train.tfrecords and validation.tfrecords from ./images folder. 
+
+2. train2.py
+This is the latest and most advanced program. Do validation every 1000 step while trianing
+
+3. check the scalers and images summary
+tensorboard --logdir=./log/resized_train2/alexnet_v2_2 to check the training and validation summary of an Alexnet.
+So far, Alexnet performs the best both in speed(cost 2000 seconds to train 15000 steps, around 4 times faster than vgg_16) and accuracy(93% on validation dataset)
+
+4. actually, tf.resize_images can work well with neural networks. See the problem of display in the 'explore image_resizing' section in write_read_TFRecords.ipynb
+
+Other basic program:
+5. train.py 
+start a training process with vgg_16
+6. test.py 
+checkout an checkpoint created during train.py and do the test.
+

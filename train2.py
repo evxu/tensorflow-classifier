@@ -5,7 +5,7 @@ import tensorflow as tf
 import time
 import argparse
 import sys
-# import pkgutil
+import pkgutil
 import tensorflow.contrib.slim.nets as net
 import os
 import math
@@ -15,6 +15,16 @@ import numpy as np
 Train and validation version 2
 Difference training and validation by changing the feeding data 
 Do validation over num_example/batch_size steps.
+
+Following FLAG.net have worked for samll datasets:
+    vgg.vgg_16  img_size=244
+    vgg.vgg_a   img_size=244
+    inception_v3.inception_v3   img_size=299
+    alexnet_v2  img_size=224
+
+Failed to converge after 10000 stpes:
+    inception_v1.inception_v1   img_size=224
+
 '''
 
 def read_and_decode(filename_queue, img_size):
@@ -34,8 +44,8 @@ def read_and_decode(filename_queue, img_size):
     image_shape = tf.pack([height, width, 3])
     image = tf.reshape(image, image_shape)
     # resize image for the nets
-    resized_image = tf.image.resize_image_with_crop_or_pad(image, img_size, img_size)
-    # not work: resized_image = tf.image.resize_images(resized_image, [SIZE, SIZE],align_corners=True)
+    # crop or pad resize: resized_image = tf.image.resize_image_with_crop_or_pad(image, img_size, img_size)
+    resized_image = tf.image.resize_images(image, [img_size, img_size])
     # initiralize image values
     resized_image = tf.cast(resized_image, tf.float32) * (1. / 255) - 0.5
     return resized_image, label
@@ -53,13 +63,14 @@ def inputs(dataset, img_size, batch_size):
         return images, labels
 
 def inference (inputs, num_classes):
-#     full = 'tensorflow.contrib.slim.python.slim.nets.' + 'vgg.vgg_16'
-#     # e.g. full == 'tensorflow.contrib.slim.python.slim.nets.vgg.vgg_a'
-#     fs = full.split('.')
-#     loader = pkgutil.find_loader('.'.join(fs[:-1]))
-#     module = loader.load_module('')
-#     net = getattr(module, fs[-1])
-    return net.vgg.vgg_16(inputs, num_classes)
+    full = 'tensorflow.contrib.slim.python.slim.nets.' + FLAGS.net
+    # e.g. full == 'tensorflow.contrib.slim.python.slim.nets.vgg.vgg_16'
+    fs = full.split('.')
+    loader = pkgutil.find_loader('.'.join(fs[:-1]))
+    module = loader.load_module('')
+    net = getattr(module, fs[-1])
+    # return net.vgg.vgg_16(inputs, num_classes)
+    return net(inputs, num_classes)
 
 def fcn_loss (logits, labels):
     with tf.name_scope('loss'):
@@ -153,7 +164,7 @@ def run_training(start_time):
 
         config = tf.ConfigProto()
         # config.gpu_options.allow_growth = True
-        config.gpu_options.per_process_gpu_memory_fraction = 0.4
+        config.gpu_options.per_process_gpu_memory_fraction = 0.3
         
         loss_sum = 0
         acc_sum = 0
@@ -231,12 +242,13 @@ if __name__ == '__main__':
     # parser.add_argument('--num_epochs', type=int, default=200, help='Number of epochs to run trainer')
     parser.add_argument('--max_steps', type=int, default=10000, help='Number of steps to run trainer')
     parser.add_argument('--batch_size', type=int, default=30, help='Batch size')
-    parser.add_argument('--img_size', type=int, default=244, help='Image witdh and height')
+    parser.add_argument('--img_size', type=int, default=224, help='Image witdh and height')
     parser.add_argument('--num_classes', type=int, default=2, help='Number of classes')
     parser.add_argument('--train_data', type=str, default='train.tfrecords', help='TFRecords filename of training data')
     parser.add_argument('--eval_data', type=str, default='validation.tfrecords', help='TFRecords filename of validation data')
     parser.add_argument('--log_dir', type=str, default='./temp_log/', help='Directory to put the log data')
     parser.add_argument('--num_val_examples', type=int, default=200, help='Number of validation examples to run')
     parser.add_argument('--num_tr_examples', type=int, default=800, help='Number of training examples to run')
+    parser.add_argument('--net', type=str, default='vgg.vgg_16', help='cnn architecture' )
     FLAGS, unparsed = parser.parse_known_args()
     tf.app.run()
