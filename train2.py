@@ -20,7 +20,7 @@ Following FLAG.net have worked for samll datasets:
     vgg.vgg_16  img_size=244
     vgg.vgg_a   img_size=244
     inception_v3.inception_v3   img_size=299
-    alexnet_v2  img_size=224
+    alexnet.alexnet_v2  img_size=224
 
 Failed to converge after 10000 stpes:
     inception_v1.inception_v1   img_size=224
