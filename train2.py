@@ -70,7 +70,12 @@ def inference (inputs, num_classes):
     module = loader.load_module('')
     net = getattr(module, fs[-1])
     # return net.vgg.vgg_16(inputs, num_classes)
-    return net(inputs, num_classes)
+    if 'resnet' in FLAGS.net:
+        net, end_points = net(inputs, num_classes)
+        net = tf.squeeze(net, [1, 2], name='fc8/squeezed')
+        return net, end_points
+    else:
+        return net(inputs, num_classes)
 
 def fcn_loss (logits, labels):
     with tf.name_scope('loss'):
@@ -143,7 +148,9 @@ def run_training(start_time):
         tf.summary.scalar('batch_size', FLAGS.batch_size)
 
 
-        # create two variables to summarize evaluation results
+        # tf.summary only track the changes of a tensor. 
+        # Our accuracy is given by a scaler number.
+        # So create two tf.Variable objects to summarize evaluation results
         # initial evaluation accuracy to 0.5
         eval_tr = tf.Variable(0.5, name="eval_validationdata")
         eval_te = tf.Variable(0.5, name="eval_trainingdata")
