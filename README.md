@@ -1,7 +1,18 @@
 # TensorFLow Classification Example
 Simple tensorflow classification example codes. Works on small image datasets.
 
-Supporting network achitectures includes networks under tensorflow.contrib.slim.nets
+Supporting network achitectures includes standard networks under tensorflow.contrib.slim.nets
+        
+        @@alexnet_v2
+        @@inception_v1
+        @@inception_v1_base
+        @@inception_v2
+        @@inception_v2_base
+        @@inception_v3
+        @@inception_v3_base
+        @@overfeat
+        @@vgg_a
+        @@vgg_16
 
 
 #### TFRecords version: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
