@@ -256,7 +256,7 @@ def run_training(start_time):
                         
                         # update validation results
                         sess.run(eval_tr.assign(acc_sum2/batch_sum2))
-                        sess.run(eval_te.assign(acc_sum3/batch_sum2))
+                        sess.run(eval_te.assign(acc_sum3/batch_sum3))
                         # print(eval_tr.eval())
                         # print(eval_te.eval())
                         merged_str = sess.run(tf.summary.merge([eval_s1, eval_s2]), feed_dict=feed_dict)
