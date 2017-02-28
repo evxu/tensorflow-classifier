@@ -22,6 +22,7 @@ Following FLAG.net have worked for samll datasets:
     vgg.vgg_a   img_size=244
     inception_v3.inception_v3   img_size=299
     alexnet.alexnet_v2  img_size=224
+    alexnet.alexnet_v1_50  img_size=224
 
 
 Failed to converge after 10000 stpes:
@@ -47,15 +48,15 @@ picpac database preparation:
 
 '''
 
-def inference (inputs, num_classes):
-    full = 'tensorflow.contrib.slim.python.slim.nets.' + FLAGS.net
+def inference (inputs, num_classes, nets):
+    full = 'tensorflow.contrib.slim.python.slim.nets.' + nets
     # e.g. full == 'tensorflow.contrib.slim.python.slim.nets.vgg.vgg_16'
     fs = full.split('.')
     loader = pkgutil.find_loader('.'.join(fs[:-1]))
     module = loader.load_module('')
     net = getattr(module, fs[-1])
     # return net.vgg.vgg_16(inputs, num_classes)
-    if 'resnet' in FLAGS.net:
+    if 'resnet' in nets:
         net, end_points = net(inputs, num_classes)
         net = tf.squeeze(net, [1, 2], name='fc8/squeezed')
         return net, end_points
@@ -66,7 +67,7 @@ def fcn_loss (logits, labels):
     with tf.name_scope('loss'):
         labels = tf.to_int32(labels)    # float from picpac
         xe = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits, name='xentropy')
-        hit = tf.cast(tf.nn.in_top_k(logits, labels, 1, name="accuracy"), tf.float32)
+        hit = tf.cast(tf.nn.in_top_k(logits, labels, FLAGS.num_classes-1, name="accuracy"), tf.float32)
         return [tf.reduce_mean(xe, name='xentropy_mean'), tf.reduce_mean(hit, name='accuracy_total')]
     pass
 
@@ -133,7 +134,7 @@ def run_training(start_time):
         labels_placeholder = tf.placeholder(tf.float32, shape = (FLAGS.batch_size,), name = 'labels')
         
         # model inference, loss and accuracy
-        predictions, _ = inference(images_placeholder, FLAGS.num_classes)
+        predictions, _ = inference(images_placeholder, FLAGS.num_classes, FLAGS.net)
         loss, accuracy = fcn_loss(predictions, labels_placeholder)
         
         # Prediction results in a batch.
@@ -165,7 +166,7 @@ def run_training(start_time):
                            tf.local_variables_initializer())
 
         # Create a saver for writing training checkpoints.
-        saver = tf.train.Saver(max_to_keep = 10)
+        saver = tf.train.Saver(max_to_keep = 1000)
         # Build the summary Tensor based on the TF collection of Summaries 
         summary_op = tf.summary.merge_all()
         # Instantiate a SummaryWriter to output summaries and the Graph
