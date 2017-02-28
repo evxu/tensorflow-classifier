@@ -1,13 +1,21 @@
-# tf-dhl
-detect dhl logo with tensorflow
+# TensorFLow Classification example
+Simple tensorflow classification example codes. Works on small image datasets.
 
-training dataset: around 800 images
-
-validation dataset: around 200 images
+Supporting network achitectures includes networks under tensorflow.contrib.slim.nets
 
 
-train.py train a VGG network
+#### TFRecords version: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
 
-test.py restore checkpoint and test network on validation dataset
+ * example: DHL logo binary classification
+    training dataset: around 800 images
+    validation dataset: around 200 images
 
-train2.py train and do validation periodically.
+ * train.py train a VGG network
+
+ * test.py restore checkpoint and test network on validation dataset
+
+ * train2.py train and do validation periodically.
+
+=====
+#### Picpac version: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
+ * rewrite train2.py to train with picpac format dataset
