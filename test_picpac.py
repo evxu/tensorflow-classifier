@@ -39,7 +39,7 @@ def eval():
 		
 		resized_images = tf.image.resize_images(images_placeholder, size=(FLAGS.img_size, FLAGS.img_size))
 		# inference model
-		logits, _ = inference(resized_images, FLAGS.num_classes, FLAGS.net)
+		logits, _ = inference(resized_images, FLAGS.num_classes, FLAGS.net, is_training=False)
 		scores = tf.nn.softmax(logits, dim=-1, name=None)
 		# Calculate predictions
 		top_k_op = tf.nn.in_top_k(predictions=logits, targets=labels_placeholder, k=FLAGS.num_classes-1, name="accuracy")
@@ -55,7 +55,7 @@ def eval():
 			for images, labels, pad in te_stream:
 				
 				predictions, correct = sess.run([scores, top_k_op], feed_dict={images_placeholder: images, labels_placeholder: labels})
-				print('score: %s, correct: %s'%(predictions, np.sum(correct)))
+				print('image %s score: %s, correct: %s'%(num, predictions, np.sum(correct)))
 				# save images
 				path = os.path.join(FLAGS.outdir, FLAGS.imagedir, str(num)+'.jpg')
 				cv2.imwrite(path, images[0])
@@ -67,9 +67,9 @@ def eval():
 				true_count += np.sum(correct)
 			# Compute precisions
 			precision = true_count / num
-			print('precision = %.4f' % (precision))
+			print('precision = {}'.format(precision))
 			
-			htmlf.write('<br>total accuracy = {}\n'.format(precision))
+			htmlf.write('<br>total accuracy = {0:.5}\n'.format(precision))
 			htmlf.close()
 			
 

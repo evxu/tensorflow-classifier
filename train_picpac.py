@@ -48,7 +48,8 @@ picpac database preparation:
 
 '''
 
-def inference (inputs, num_classes, nets):
+def inference (inputs, num_classes, nets, is_training=True):
+    # For test turn off dropout! is_training=False
     full = 'tensorflow.contrib.slim.python.slim.nets.' + nets
     # e.g. full == 'tensorflow.contrib.slim.python.slim.nets.vgg.vgg_16'
     fs = full.split('.')
@@ -61,7 +62,7 @@ def inference (inputs, num_classes, nets):
         net = tf.squeeze(net, [1, 2], name='fc8/squeezed')
         return net, end_points
     else:
-        return net(inputs, num_classes)
+        return net(inputs, num_classes,is_training=is_training)
 
 def fcn_loss (logits, labels):
     with tf.name_scope('loss'):
@@ -279,7 +280,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--learning_rate', type=float, default=0.01, help='Initial learning rate')
     # parser.add_argument('--num_epochs', type=int, default=200, help='Number of epochs to run trainer')
-    parser.add_argument('--max_steps', type=int, default=20000, help='Number of steps to run trainer')
+    parser.add_argument('--max_steps', type=int, default=10000, help='Number of steps to run trainer')
     parser.add_argument('--save_steps', type=int, default=1000, help='Number of steps to save model')
     parser.add_argument('--batch_size', type=int, default=30, help='Batch size')
     parser.add_argument('--img_size', type=int, default=224, help='Image witdh and height')
