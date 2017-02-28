@@ -1,4 +1,4 @@
-# TensorFLow Classification example
+# TensorFLow Classification Example
 Simple tensorflow classification example codes. Works on small image datasets.
 
 Supporting network achitectures includes networks under tensorflow.contrib.slim.nets
