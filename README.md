@@ -15,7 +15,7 @@ Supporting network achitectures includes standard networks under [tensorflow.con
         @@vgg_16
 
 
-### TFRecords: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
+## TFRecords: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
 
  * convert_to_records.py: create TFRecords data file from raw images
  
@@ -30,5 +30,11 @@ Supporting network achitectures includes standard networks under [tensorflow.con
  * train2.py train and do validation periodically.
 
 
-### Picpac: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
+## Picpac: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
  * train_picpac.py
+
+## Docker image
+Networks can be trained on GPU with tensorflow installed, or in a docker container on CPU.
+To build this docker image, use Dockerfile provided in tensorflow-docker repository.
+
+`$ docker build -f /path/to/a/Dockerfile .`
