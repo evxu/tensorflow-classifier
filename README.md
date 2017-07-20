@@ -17,24 +17,32 @@ Supporting network achitectures includes standard networks under [tensorflow.con
 
 ## TFRecords: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
 
- * convert_to_records.py: create TFRecords data file from raw images
+ * **convert_to_records.py**: create TFRecords data file from raw images
  
- * example: DHL logo apperance binary classification
+ * **example data**: logo apperance binary classification
     training dataset: around 800 images
     validation dataset: around 200 images
 
- * train.py train a VGG network
+ * **train.py** train a VGG network by default
 
- * test.py restore checkpoint and test network on validation dataset
+ * **test.py** restore checkpoint and test network on validation dataset
 
- * train2.py train and do validation periodically.
+ * **train2.py** train and do validation periodically.
 
 
 ## Picpac: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
  * train_picpac.py
+
+
+## TensorBoard
+Keep a training log by specify `--log_dir` before starting train.py. While training, visualise learning on TensorBoard by command
+
+`$ tensorboard --logdir=path/to/log-directory`
+
 
 ## Docker image
 Networks can be trained on GPU with tensorflow installed, or in a docker container on CPU.
 To build this docker image, use Dockerfile provided in tensorflow-docker repository.
 
 `$ docker build -f /path/to/a/Dockerfile .`
+
