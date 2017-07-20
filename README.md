@@ -1,7 +1,7 @@
 # TensorFLow Classification Example
 Simple tensorflow classification example codes. Works on small image datasets.
 
-Supporting network achitectures includes standard networks under tensorflow.contrib.slim.nets
+Supporting network achitectures includes standard networks under [tensorflow.contrib.slim.nets](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim/python/slim/nets)
         
         @@alexnet_v2
         @@inception_v1
