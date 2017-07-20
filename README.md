@@ -15,9 +15,11 @@ Supporting network achitectures includes standard networks under [tensorflow.con
         @@vgg_16
 
 
-#### TFRecords version: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
+### TFRecords: data are pre-processed into [TFRecords](https://www.tensorflow.org/programmers_guide/reading_data) format
 
- * example: DHL logo binary classification
+ * convert_to_records.py: create TFRecords data file from raw images
+ 
+ * example: DHL logo apperance binary classification
     training dataset: around 800 images
     validation dataset: around 200 images
 
@@ -27,6 +29,6 @@ Supporting network achitectures includes standard networks under [tensorflow.con
 
  * train2.py train and do validation periodically.
 
-=====
-#### Picpac version: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
- * rewrite train2.py to train with picpac format dataset
+
+### Picpac: data are pre-processed into [picpac](http://picpac.readthedocs.io/en/latest/) format
+ * train_picpac.py
